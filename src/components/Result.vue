@@ -10,7 +10,7 @@
                         <!-- Review ボタン -->
                 <div>
                     <button
-                        @click="toggleReview(anime)"
+                        @click="toggleReview(anime.id)"
                     >
                         Add on your list
                     </button>
