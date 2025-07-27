@@ -54,7 +54,7 @@ const userAnimeList = ref([])
 
 const getUserAnimeList = async (username) => {
   try {
-    const res = await fetch(`${API_BASE}user-anime-list?username=${encodeURIComponent(username)}`)
+    const res = await fetch(`${API_BASE}/api/user-anime-list?username=${encodeURIComponent(username)}`)
     const data = await res.json()
     userAnimeList.value = data.animeList || []
   } catch (err) {
