@@ -2,7 +2,7 @@
 
         <form @submit.prevent="submitReview" >
                 <input v-model="name" type="text" placeholder="Enter your name" required />
-                <select v-model.number="WhichList"> 
+                <select v-model="WhichList"> 
                     <option value="dropped">Dropped</option>
                     <option value="watched">Watched</option>
                     <option value="bests">My bests</option>
@@ -40,7 +40,7 @@
     const reviewData = {
         id: props.anime.id,
         title: props.anime.title,
-        images: props.anime.images.recommended_url,
+        image: props.anime.images.recommended_url,
         review: {
         name: name.value,
         WhichList: WhichList.value
