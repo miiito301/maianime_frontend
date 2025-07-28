@@ -30,14 +30,16 @@ import { defineProps } from 'vue'
 const props = defineProps({
   animeListLocal: {
     type: Array,
-    required: true
+    required: true,
+    default: () => []
   }
 })
 
 // anime.review.WhichList でグループ化
 const categorizedAnime = computed(() => {
   const groups = {}
-  for (const anime of props.animeListLocal) {
+  const list = props.animeListLocal ?? []
+  for (const anime of list) {
     const category = anime.review?.WhichList || 'uncategorized'
     if (!groups[category]) {
       groups[category] = []
