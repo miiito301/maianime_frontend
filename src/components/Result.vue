@@ -1,80 +1,58 @@
 <template>
-  <!--AnimeList.vue-->
+  <!--Result.vue-->
   <div>
-    <h2>ユーザーのアニメリスト</h2>
-    <div v-if="animeListLocal.length === 0">アニメが見つかりません。</div>
-    <div v-else class="anime-grid">
-      <div v-for="anime in animeListLocal" :key="anime.id" class="anime-card">
-        <img :src="anime.imageUrl || anime.fallbackImage || '/no-image.jpg'"  />
+    <h2>Result</h2>
+    <div v-if="animeList.length === 0">No Anime Found</div>
+    <div v-else>
+      <div v-for="anime in animeList" :key="anime.id">
+        <img :src="anime.images.recommended_url || '/no-image.jpg'" />
         <p>{{ anime.title }}</p>
+
+                        <!-- Review ボタン -->
+                <div>
+                    <button
+                        @click="toggleReview(anime.id)"
+                    >
+                        Add on your list
+                    </button>
+                </div>
+
+                <transition>
+                    <div v-if="showReviewFormId === anime.id">
+                    <ResultForm :anime="anime" @submit-review="handleSubmitReview" />
+                    </div>
+                </transition>
+
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-
-const props = defineProps({
+defineProps({
   animeList: {
     type: Array,
-    required: true
+    required: true,
+    default: () => []
   }
 })
 
-const animeListLocal = ref([])
-const SERP_API_KEY = import.meta.env.VITE_SERP_API_KEY // 環境変数名修正済み
+    import {ref} from "vue"
+    import ResultForm from "./ResultForm.vue"
 
-// SerpAPIで画像を取得
-const getImageFromSerpApi = async (title) => {
-  const query = `${title} アニメ`
-  const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&tbm=isch&api_key=${SERP_API_KEY}`
-  try {
-    const res = await fetch(url)
-    const data = await res.json()
-    return data.images_results?.[0]?.original || ''
-  } catch (error) {
-    console.error('SerpAPI画像取得エラー:', error)
-    return ''
-  }
-}
+    const showReviewFormId =ref(null) //表示中の感想フォームのID
 
-// Google Books APIから漫画表紙を取得
-const getImageFromGoogleBooks = async (title) => {
-  const query = `${title}`
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`
-  try {
-    const res = await fetch(url)
-    const data = await res.json()
-    const book = data.items?.[0]
-    return book?.volumeInfo?.imageLinks?.thumbnail?.replace('http://', 'https://') || ''
-  } catch (err) {
-    console.error('Google Books画像取得エラー:', err)
-    return ''
-  }
-}
+    const toggleReview = (id) => {
+        showReviewFormId.value =showReviewFormId.value === id ? null : id
+    }
 
-// 両方試す（SerpAPI → Google Books）
-const getFallbackImage = async (title) => {
-  const serpImage = await getImageFromSerpApi(title)
-  if (serpImage) return serpImage
+    const emit = defineEmits(['submit-review'])
 
-  const googleBooksImage = await getImageFromGoogleBooks(title)
-  return googleBooksImage
-}
+    //感想の送信イベントを受け取り、バックエンドに送信
+    const handleSubmitReview = (reviewData) => {
+        emit('submit-review', reviewData)
+    }
 
-// animeList 更新時にfallbackImage取得
-watch(() => props.animeList, async (newList) => {
-  animeListLocal.value = await Promise.all(
-    newList.map(async anime => {
-      if (!anime.imageUrl) {
-        const fallbackImage = await getFallbackImage(anime.title)
-        return { ...anime, fallbackImage }
-      } else {
-        return anime
-      }
-    })
-  )
-}, { immediate: true })
 
 </script>
