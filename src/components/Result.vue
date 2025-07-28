@@ -4,7 +4,6 @@
     <div v-if="animeList.length === 0">No Anime Found</div>
     <div v-else>
       <div v-for="anime in animeList" :key="anime.id">
-        <img :src="anime.images.recommended_url" :alt="`${anime.title}の画像が見つかりません`" />
         <p>{{ anime.title }}</p>
 
                         <!-- Review ボタン -->
