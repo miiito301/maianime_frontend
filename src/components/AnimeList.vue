@@ -13,7 +13,7 @@
           class="anime-card"
         >
           <img
-            :src="anime.imageUrl || anime.fallbackImage || '/no-image.jpg'"
+            :src="anime.imageUrl && anime.imageUrl.trim() !== '' ? anime.imageUrl : 'https://placehold.co/160x220?text=No+Image'"
             alt="Anime Image"
           />
           <p>{{ anime.title }}</p>
@@ -24,26 +24,21 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { defineProps } from 'vue'
+import { computed, defineProps } from 'vue'
 
 const props = defineProps({
   animeListLocal: {
     type: Array,
-    required: true,
     default: () => []
   }
 })
 
-// anime.review.WhichList でグループ化
 const categorizedAnime = computed(() => {
   const groups = {}
   const list = props.animeListLocal ?? []
   for (const anime of list) {
-    const category = anime.review?.WhichList || 'uncategorized'
-    if (!groups[category]) {
-      groups[category] = []
-    }
+    const category = anime.review?.WhichList 
+    if (!groups[category]) groups[category] = []
     groups[category].push(anime)
   }
   return groups
@@ -56,7 +51,6 @@ const formatCategoryName = (key) => {
     dropped: 'Dropped',
     bests: 'My Bests',
     gotta_watch: 'Gotta Watch',
-    uncategorized: 'Uncategorized'
   }
   return names[key] || key
 }
