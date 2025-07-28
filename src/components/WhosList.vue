@@ -1,6 +1,6 @@
 <template>
   <!-- WhosList.vue -->
-  <form @submit.prevent="fetchReviews" class="search-form">
+  <form @submit.prevent="fetchReviews">
     <input v-model="reviewer_name" type="text" placeholder="Enter user name" required />
     <button type="submit">Get List</button>
   </form>
