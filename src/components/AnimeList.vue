@@ -4,7 +4,7 @@
     <div v-if="animeListLocal.length === 0" class="no-results">No User Found</div>
     <div v-else class="anime-grid">
       <div v-for="anime in animeListLocal" :key="anime.id" class="anime-card">
-        <img :src="anime.fallbackImage || '/no-image.jpg'"  />
+        <img :src="anime.imageUrl || anime.fallbackImage || '/no-image.jpg'"  />
         <p>{{ anime.title }}</p>
       </div>
     </div>
