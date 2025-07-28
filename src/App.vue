@@ -56,6 +56,10 @@ const getUserAnimeList = async (username) => {
   try {
     const res = await fetch(`${API_BASE}/api/reviews/user?username=${encodeURIComponent(username)}`)
     const data = await res.json()
+
+    console.log("受け取ったデータ:", data)
+    console.log("animeList:", data.animeList)
+
     userAnimeList.value = data.animeList || []
   } catch (err) {
     console.error("Error fetching user's anime list:", err)
