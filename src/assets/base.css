@@ -178,13 +178,12 @@ form button:hover {
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   margin-bottom: 8px;
 }
-
 .anime-card p {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;     /* 長い単語を途中で改行可 */
+  white-space: normal;        /* 改行を許可 */
+  overflow-wrap: break-word;  /* 複合語の途中でも改行 */
+  text-align: center;         /* お好みで中央揃え */
+  margin-top: 8px;            /* 画像との間に余白 */
+  font-size: 14px;            /* フォントサイズ調整 */
+  max-width: 160px;           /* 画像幅と合わせると整う */
 }
