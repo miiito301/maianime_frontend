@@ -1,0 +1,250 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
+:root {
+  --bg-color: #2e2e2e;
+  --accent-color: #ffcc00;
+  --text-color: #ffffff;
+  --card-bg: #3a3a3a;
+  --border-radius: 10px;
+  --transition-speed: 0.3s;
+}
+body{
+    background-color:rgb(3, 3, 44);
+    font-family: 'Gloria Hallelujah', 'cursive', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+}
+h1, h2 {
+  text-align: center;
+  color: var(--accent-color);
+}
+
+/*Form.vue*/
+.form-title {
+  font-size: 5rem;
+  margin-top: 2rem;
+}
+form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 2rem auto;
+}
+form input[type="text"] {
+  padding: 10px;
+  border: none;
+  border-radius: var(--border-radius);
+  width: 300px;
+  font-size: 1rem;
+}
+form button {
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+form button:hover {
+  background-color: #e6b800;
+}
+
+/*Result.vue*/
+.no-results {
+  text-align: center;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  margin-top: 2rem;
+}
+.result-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 1rem;
+}
+.result-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  margin:1.5rem;
+  width: 220px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  transition: transform var(--transition-speed);
+}
+.result-card:hover {
+  transform: translateY(-5px);
+}
+.result-card p {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  
+}
+.result-card button {
+  margin-top: 0.5rem;
+  background-color: transparent;
+  color: var(--accent-color);
+  border: 2px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+.result-card button:hover {
+  background-color: var(--accent-color);
+  color: #000;
+}
+
+/*ResultForm.vue*/
+.result-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 1rem;
+}
+.result-card form input,
+.result-card form select {
+    width: 100%;
+    box-sizing: border-box;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: rgb(255, 255, 255);
+  color: black;
+}
+.result-card form button {
+  background-color: #FFD700; /* 黄色 */
+  color: #333;
+  border: none;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.result-card form button:hover {
+  background-color: #e6c200;
+}
+
+/*WhosList.vue*/
+
+
+/*AnimeList.vue*/
+.anime-shelves {
+  padding: 16px;
+}
+
+.shelf {
+  margin-bottom: 40px;
+}
+
+.shelf-title {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+.shelf-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding-bottom: 8px;
+}
+
+.anime-card {
+  flex: 0 0 auto;
+  width: 160px;
+  cursor: pointer;
+  transition: transform 0.3s;
+  text-align: center;
+}
+
+.anime-card:hover {
+  transform: scale(1.05);
+}
+
+.anime-card img {
+  width: 160px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  margin-bottom: 8px;
+}
+
+.anime-card p {
+  word-break: break-word;     /* 長い単語を途中で改行可 */
+  white-space: normal;        /* 改行を許可 */
+  overflow-wrap: break-word;  /* 複合語の途中でも改行 */
+  text-align: center;         /* お好みで中央揃え */
+  margin-top: 8px;            /* 画像との間に余白 */
+  font-size: 14px;            /* フォントサイズ調整 */
+  max-width: 160px;           /* 画像幅と合わせると整う */
+}
+
+
+@media (max-width: 600px) {
+  /* 全体のパディング縮小 */
+  .anime-shelves {
+    padding: 8px;
+  }
+
+  /* 棚のタイトルを小さく */
+  .shelf-title {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+
+  /* カードサイズを小さく */
+  .anime-card {
+    width: 120px;
+  }
+
+  .anime-card img {
+    width: 120px;
+    height: 165px;
+  }
+
+  .anime-card p {
+    font-size: 12px;
+    max-width: 120px;
+  }
+
+  /* 検索フォームも調整 */
+  form {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  form input[type="text"] {
+    width: 90%;
+    max-width: 280px;
+  }
+
+  form button {
+    width: 90%;
+    max-width: 200px;
+  }
+
+  .form-title {
+    font-size: 3rem;
+  }
+
+  .result-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .result-card {
+    width: 90%;
+    max-width: 300px;
+    margin: 1rem auto;
+  }
+
+  .result-card p {
+    font-size: 1rem;
+  }
+}
