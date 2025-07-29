@@ -33,9 +33,86 @@
 </template>
 
 <script setup>
+
 import { ref, watch, computed, defineProps } from 'vue'
 
-// ...省略（以前のロジックのまま）
+const props = defineProps({
+  animeListLocal: {
+    type: Array,
+    default: () => []
+  }
+})
+
+const animeListWithFallback = ref([])
+const isLoading = ref(true) // ✅ 追加
+
+// ✅ Google Books APIから画像取得
+const getImageFromGoogleBooks = async (title) => {
+  const queries = [
+    `${title} 漫画`,
+    `${title} コミック`,
+    `${title} アニメ`,
+    `${title}`,
+    `${title} コミカライズ`,
+  ]
+
+  for (const query of queries) {
+    const url = `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(query)}+subject:comic&langRestrict=ja&printType=books&orderBy=relevance&maxResults=1`
+    try {
+      const res = await fetch(url)
+      const data = await res.json()
+      const book = data.items?.[0]
+      const image = book?.volumeInfo?.imageLinks?.thumbnail?.replace('http://', 'https://')
+      if (image) {
+        return image
+      }
+    } catch (err) {
+      console.error(`Google Books画像取得エラー（${query}）:`, err)
+    }
+  }
+
+  return ''
+}
+
+// ✅ animeListLocal が更新されたときに fallbackImage を追加
+watch(() => props.animeListLocal, async (newList) => {
+  isLoading.value = true // 開始時ローディング
+  animeListWithFallback.value = await Promise.all(
+    newList.map(async (anime) => {
+      if (!anime.imageUrl?.trim()) {
+        const fallbackImage = await getImageFromGoogleBooks(anime.title)
+        return { ...anime, fallbackImage }
+      } else {
+        return anime
+      }
+    })
+  )
+  isLoading.value = false // 読み込み完了
+}, { immediate: true })
+
+// ✅ カテゴリ別に分類
+const categorizedAnime = computed(() => {
+  const groups = {}
+  const list = animeListWithFallback.value ?? []
+  for (const anime of list) {
+    const category = anime.review?.WhichList
+    if (!groups[category]) groups[category] = []
+    groups[category].push(anime)
+  }
+  return groups
+})
+
+// ✅ カテゴリ名表示用
+const formatCategoryName = (key) => {
+  const names = {
+    watched: 'Watched',
+    watching: 'Watching',
+    dropped: 'Dropped',
+    bests: 'My Bests',
+    gotta_watch: 'Gotta Watch',
+  }
+  return names[key] || key
+}
 
 </script>
 .loading {
