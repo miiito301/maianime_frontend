@@ -38,17 +38,29 @@ const animeListWithFallback = ref([])
 
 // ✅ Google Books APIから画像取得
 const getImageFromGoogleBooks = async (title) => {
-  const query = `${title} 漫画`
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`
-  try {
-    const res = await fetch(url)
-    const data = await res.json()
-    const book = data.items?.[0]
-    return book?.volumeInfo?.imageLinks?.thumbnail?.replace('http://', 'https://') || ''
-  } catch (err) {
-    console.error('Google Books画像取得エラー:', err)
-    return ''
+  const queries = [
+    `${title} 漫画`,
+    `${title} コミック`,
+    `${title} アニメ`,
+    `${title}`,
+    `${title} volume 1`,
+    `${title} book`
+  ]
+  for (const query of queries) {
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`
+    try {
+      const res = await fetch(url)
+      const data = await res.json()
+      const book = data.items?.[0]
+      const image = book?.volumeInfo?.imageLinks?.thumbnail?.replace('http://', 'https://')
+      if (image) {
+        return image
+      }
+    } catch (err) {
+      console.error(`Google Books画像取得エラー（${query}）:`, err)
+    }
   }
+  return ''
 }
 
 // ✅ animeListLocal が更新されたときに fallbackImage を追加
