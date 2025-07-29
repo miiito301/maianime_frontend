@@ -52,7 +52,7 @@ const getImageFromGoogleBooks = async (title) => {
     const res = await fetch(url)
     const data = await res.json()
     const book = data.items?.[0]
-    const image = book?.volumeInfo?.imageLinks?.thumbnail?.replace('http://', 'https://')
+    const image = book.volumeInfo.imageLinks?.thumbnail
     return image || ''
   } catch (err) {
     console.error(`Google Books画像取得エラー（${title}）:`, err)
