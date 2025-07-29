@@ -4,7 +4,7 @@
   <Form @submit-form="getAnime"/>
   <Result :animeList="animeList"  @submit-review="handleReviewSubmit"/>
   <WhosList @submit-username="getUserAnimeList"/>
-  <AnimeList  :animeListLocal="animeListFromDBorAPI"/>
+  <AnimeList  :animeListLocal="userAnimeList"/>
 </template>
 
 <script setup>
