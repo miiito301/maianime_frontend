@@ -14,7 +14,7 @@
           class="anime-card"
         >
           <img
-            :src="anime.fallbackImage || 'https://placehold.co/160x220?text=No+Image'"
+            :src="anime.fallbackImage || anime.imageUrl?.trim() || 'https://placehold.co/160x220?text=No+Image'"
             alt="Anime Image"
           />
           <p>{{ anime.title }}</p>
@@ -38,7 +38,7 @@ const animeListWithFallback = ref([])
 
 // ✅ Google Books APIから画像取得
 const getImageFromGoogleBooks = async (title) => {
-  const query = `${title}`
+  const query = `${title} 漫画`
   const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`
   try {
     const res = await fetch(url)
