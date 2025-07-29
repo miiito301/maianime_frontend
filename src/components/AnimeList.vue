@@ -49,11 +49,7 @@ const isLoading = ref(true) // ✅ 追加
 // ✅ Google Books APIから画像取得
 const getImageFromGoogleBooks = async (title) => {
   const queries = [
-    `${title} 漫画`,
-    `${title} コミック`,
-    `${title} アニメ`,
     `${title}`,
-    `${title} コミカライズ`,
   ]
 
   for (const query of queries) {
