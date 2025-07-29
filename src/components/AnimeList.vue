@@ -14,7 +14,7 @@
           class="anime-card"
         >
           <img
-            :src="anime.imageUrl?.trim() || anime.fallbackImage || 'https://placehold.co/160x220?text=No+Image'"
+            :src="anime.fallbackImage || 'https://placehold.co/160x220?text=No+Image'"
             alt="Anime Image"
           />
           <p>{{ anime.title }}</p>
