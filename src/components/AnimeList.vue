@@ -45,23 +45,31 @@ const props = defineProps({
 const animeListWithFallback = ref([])
 const isLoading = ref(true)
 
-// Google Books APIから画像取得
+
+// Google Books APIから画像取得（厳→緩の順に検索）
 const getImageFromGoogleBooks = async (title) => {
-  const query = [`intitle:${title} 漫画`,
-                  `intitle:${title} `,
-  ]
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&printType=books&orderBy=relevance&maxResults=1`
-  try {
-    const res = await fetch(url)
-    const data = await res.json()
-    const book = data.items?.[0]
-    const image = book.volumeInfo.imageLinks?.thumbnail
-    return image || ''
-  } catch (err) {
-    console.error(`Google Books画像取得エラー（${title}）:`, err)
-    return ''
+  const queries = [
+    `intitle:${title} 漫画`, // 厳しめ検索
+    `${title}`               // 緩め検索
+  ];
+
+  for (const query of queries) {
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&printType=books&langRestrict=ja&orderBy=relevance&maxResults=1`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      const book = data.items?.[0];
+      const image = book?.volumeInfo?.imageLinks?.thumbnail?.replace('http://', 'https://');
+      if (image) {
+        return image;
+      }
+    } catch (err) {
+      console.error(`Google Books画像取得エラー（${query}）:`, err);
+    }
   }
-}
+
+  return '';
+};
 
 
 // animeListLocal が更新されたときに fallbackImage を取得
