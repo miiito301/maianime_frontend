@@ -47,7 +47,9 @@ const isLoading = ref(true)
 
 // Google Books APIから画像取得
 const getImageFromGoogleBooks = async (title) => {
-  const query = `intitle:${title} 漫画`;
+  const query = [`intitle:${title} 漫画`,
+                  `intitle:${title} `,
+  ]
   const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&printType=books&orderBy=relevance&maxResults=1`
   try {
     const res = await fetch(url)
