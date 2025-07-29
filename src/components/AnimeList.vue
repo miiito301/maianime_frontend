@@ -51,14 +51,20 @@ const getImageFromGoogleBooks = async (title) => {
   try {
     const res = await fetch(url)
     const data = await res.json()
-    const book = data.items?.[0]
-    const image = book.volumeInfo.imageLinks?.thumbnail
-    return image || ''
+    // itemsがあるかをチェック
+    if (!data.items || data.items.length === 0) {
+      console.warn(`Google Books API: itemsが見つかりませんでした（${title}）`)
+      return ''
+    }
+    const book = data.items[0]
+    const image = book.volumeInfo.imageLinks?.thumbnail || ''
+    return image
   } catch (err) {
     console.error(`Google Books画像取得エラー（${title}）:`, err)
     return ''
   }
 }
+
 
 // animeListLocal が更新されたときに fallbackImage を取得
 watch(() => props.animeListLocal, async (newList) => {
