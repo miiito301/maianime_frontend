@@ -47,18 +47,14 @@ const isLoading = ref(true)
 
 // Google Books APIから画像取得
 const getImageFromGoogleBooks = async (title) => {
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(title)}&printType=books&orderBy=relevance&maxResults=1`
+  const query = `intitle:${title} 漫画`;
+  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&printType=books&orderBy=relevance&maxResults=1`
   try {
     const res = await fetch(url)
     const data = await res.json()
-    // itemsがあるかをチェック
-    if (!data.items || data.items.length === 0) {
-      console.warn(`Google Books API: itemsが見つかりませんでした（${title}）`)
-      return ''
-    }
-    const book = data.items[0]
-    const image = book.volumeInfo.imageLinks?.thumbnail || ''
-    return image
+    const book = data.items?.[0]
+    const image = book.volumeInfo.imageLinks?.thumbnail
+    return image || ''
   } catch (err) {
     console.error(`Google Books画像取得エラー（${title}）:`, err)
     return ''
